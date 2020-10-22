@@ -25,7 +25,6 @@ local get_size_ptr = base.get_size_ptr
 local setmetatable = setmetatable
 local co_yield = coroutine._yield
 local subsystem = ngx.config.subsystem
-local ngx_sleep = ngx.sleep
 
 local ERR_BUF_SIZE = 128
 local MSG_BUF_SIZE = 32 * 1024
@@ -252,12 +251,7 @@ function _M.send(chan, msg)
     local rc = ngx_lua_ffi_pubsub_send(chan, #chan, msg, #msg, errmsg)
 
     if rc == FFI_ERROR then
-        local err = ffi_str(errmsg[0])
-        if err == "busy" then
-            ngx_sleep(0)
-        end
-
-        return nil, err
+        return nil, ffi_str(errmsg[0])
     end
 
     return true
