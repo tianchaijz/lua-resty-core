@@ -126,8 +126,8 @@ local mt = { __index = _M }
 
 function _M.new(backlog, clear, pop_back)
     backlog = tonumber(backlog) or 1
-    if backlog < 0 then
-        return error("no negative backlog")
+    if backlog <= 0 then
+        return error("bad backlog")
     end
 
     clear = clear and 1 or 0
